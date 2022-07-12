@@ -1,0 +1,98 @@
+<a href='/me/recyclebin/courses' style='color: #0e8cf1; font-weight: bold; margin: 32px 40px; text-decoration: none'>recycle bin <span>({{countDelete}})</span>
+</a>
+<h1 style="text-align: center;">My Courses</h1>
+<form method="POST" action="/courses/handle-actions-form">
+    <div  style="display: flex; align-items: center; justify-content: center" >
+        <div>
+            <input type="checkbox" name="" id="checkbox-all" style="cursor: pointer;">
+            <label for="checkbox-all" style="cursor: pointer;">Select All</label>
+        </div>
+        <div style="margin: 0 12px;">
+            <select name="action" required>
+                <option value="">-- Actions --</option>
+                <option>delete</option>
+            </select>
+        </div>
+        <button class="btn-delete-checkbox" type="submit" style="border: none; background-color: #4285f4; color: white; padding: 4px 14px; cursor: pointer">Perform</button>
+    </div>
+    <table style='border-collapse: collapse;border: 1px solid black; margin: 26px 30px; margin: 20px auto'>
+        <tr>
+            <th style='border-collapse: collapse;border: 1px solid black;padding: 6px 12px'>#</th>
+            <th style='border-collapse: collapse;border: 1px solid black;padding: 6px 12px'>STT</th>
+            <th style='border-collapse: collapse;border: 1px solid black;padding: 6px 12px'>Name</th>
+            <th style='border-collapse: collapse;border: 1px solid black;padding: 6px 12px'>Descriptions</th>
+            <th style='border-collapse: collapse;border: 1px solid black;padding: 6px 12px'>Created At</th>
+            <th style='border-collapse: collapse;border: 1px solid black;padding: 6px 12px'>Edit</th>
+        </tr>
+    
+        {{#each courses}}
+            <tr>
+                <td><input type="checkbox" name="coursesIds[]" id="itemCheck" value="{{this._id}}" style="cursor: pointer;"></td>
+                <td style='border-collapse: collapse;border: 1px solid black;padding: 6px 12px'>{{sum @index 1}}</td>
+                <td style='border-collapse: collapse;border: 1px solid black;padding: 6px 12px'>{{this.name}}</td>
+                <td style='border-collapse: collapse;border: 1px solid black;padding: 6px 12px'>{{this.description}}</td>
+                <td style='border-collapse: collapse;border: 1px solid black;padding: 6px 12px'>{{this.createdAt}}</td>
+                <td style='border-collapse: collapse;border: 1px solid black;padding: 6px 12px'>
+                    <a
+                        style='margin: 0 8px; font-weight: bold; text-decoration: none; color: #4285f4'
+                        href='/courses/{{this._id}}/edit'
+                    >Edit</a>
+                    |
+                    <span
+                        class='span-delete'
+                        style='margin: 0 8px; font-weight: bold; text-decoration: none; color: #121212, cursor: pointer'
+                        href=''
+                        data-id='{{this._id}}'
+                    >Delete</span>
+                </td>
+            </tr>
+        {{else}}
+            <tr>
+                <td colspan='5' style='padding: 8px 4px;'>You do not post any course -
+                    <a href='/courses/create' style='color: #0e8cf1; font-weight: bold'>Post your course here!</a></td>
+    
+            </tr>
+    
+        {{/each}}
+    </table>
+</form>
+
+
+
+<form method='POST' id='form-delete-course'></form>
+
+<script>
+    const deleteElements = document.querySelectorAll('.span-delete'); 
+    const deleteForm = document.querySelector('#form-delete-course');
+    const checkboxAll = document.querySelector('#checkbox-all')
+    const checkboxItems = document.querySelectorAll('#itemCheck')
+
+    deleteElements.forEach(deleteElement => { 
+        deleteElement.onclick = (e) => { 
+            const idDelete = e.target.dataset.id 
+            deleteForm.action = '/courses/' + idDelete + '?_method=DELETE'
+            deleteForm.submit() 
+        } 
+    });
+
+    //handle checkbox
+    var count = 0
+
+    checkboxAll.onchange = (e) => {
+        let isCheckedAll = e.target.checked
+        checkboxItems.forEach(item => {
+            item.checked = isCheckedAll
+        })
+    }
+
+    checkboxItems.forEach(item => {
+        item.onchange = () => {
+            let isChecked = item.checked
+            isChecked ? count++ : count--
+            if(count === checkboxItems.length) {
+                checkboxAll.checked = true
+            } else checkboxAll.checked = false
+        }
+    })
+
+</script>

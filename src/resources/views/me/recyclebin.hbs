@@ -1,0 +1,67 @@
+<table style='border-collapse: collapse;border: 1px solid black; margin: 26px 30px; margin: 20px auto'>
+    <tr>
+        <th style='border-collapse: collapse;border: 1px solid black;padding: 6px 12px'>#</th>
+        <th style='border-collapse: collapse;border: 1px solid black;padding: 6px 12px'>Name</th>
+        <th style='border-collapse: collapse;border: 1px solid black;padding: 6px 12px'>Descriptions</th>
+        <th style='border-collapse: collapse;border: 1px solid black;padding: 6px 12px'>Deleted At</th>
+        <th style='border-collapse: collapse;border: 1px solid black;padding: 6px 12px'>Edit</th>
+    </tr>
+
+    {{#each courses}}
+        <tr>
+            <td style='border-collapse: collapse;border: 1px solid black;padding: 6px 12px'>{{sum @index 1}}</td>
+            <td style='border-collapse: collapse;border: 1px solid black;padding: 6px 12px'>{{this.name}}</td>
+            <td style='border-collapse: collapse;border: 1px solid black;padding: 6px 12px'>{{this.description}}</td>
+            <td style='border-collapse: collapse;border: 1px solid black;padding: 6px 12px'>{{this.deletedAt}}</td>
+            <td style='border-collapse: collapse;border: 1px solid black;padding: 6px 12px'>
+                <a
+                    class="a-restore"
+                    style='margin: 0 8px; font-weight: bold; text-decoration: none; color: #4285f4'
+                    href=''
+                    data-id="{{this._id}}"
+                >Restore</a>
+                |
+                <span
+                    class='span-delete'
+                    style='margin: 0 8px; font-weight: bold; text-decoration: none; color: #121212, cursor: pointer'
+                    href=''
+                    data-id='{{this._id}}'
+                >Delete</span>
+            </td>
+        </tr>
+    {{else}}
+        <tr>
+            <td colspan='5' style='padding: 8px 4px;'>You do not deleted any course 
+
+        </tr>
+
+    {{/each}}
+</table>
+<form action="" method="POST" class="restore-form"></form>
+<form action="" method="POST" class="delete-form"></form>
+
+<script>
+    const elementRestores = document.querySelectorAll('.a-restore')
+    const spanDeletes = document.querySelectorAll('.span-delete')
+    const restoreForm = document.querySelector('.restore-form')
+    const deleteForm = document.querySelector('.delete-form')
+
+    elementRestores.forEach(element => {
+        element.onclick = (e) => {
+            e.preventDefault()
+            const idDelete = e.target.dataset.id 
+            restoreForm.action = '/me/' + idDelete + '/restore?_method=PATCH'
+            restoreForm.submit() 
+        }
+    })
+
+    spanDeletes.forEach(element => {
+        element.onclick = (e) => {
+            e.preventDefault()
+            const idDelete = e.target.dataset.id 
+            deleteForm.action = '/me/' + idDelete + '/force?_method=DELETE'
+            deleteForm.submit() 
+        }
+    })
+
+</script>

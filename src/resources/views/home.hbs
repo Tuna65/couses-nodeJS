@@ -1,0 +1,12 @@
+<div style='display: flex; flex-wrap: wrap;max-width: 1200px; margin: 20px auto;  align-item:center; '>
+    {{#each courses}}
+
+        <div
+            style='width: 30%;border-bottom: 1px solid #ccc;background-clip:content-box;margin: 20px 12px; text-align: center'
+        >
+            <a href='/courses/{{this.slug}}' style='text-decoration: none; color: black'><h1>{{this.name}}</h1></a>
+            <p style='color: #999;'>{{this.description}}</p>
+        </div>
+
+    {{/each}}
+</div>
